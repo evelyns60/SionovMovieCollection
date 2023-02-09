@@ -150,6 +150,13 @@ public class MovieCollection {
       listToSort.set(possibleIndex, temp);
     }
   }
+
+  private void sortStrings(ArrayList<String> listToSort) {
+    for (int i = 1; i < listToSort.size(); i++) {
+      String temp = listToSort.get(i);
+
+    }
+  }
   
   private void displayMovieInfo(Movie movie) {
     System.out.println();
@@ -167,12 +174,73 @@ public class MovieCollection {
   private void searchKeywords() {
     System.out.print("Enter a keyword search: ");
     String searchTerm = scanner.nextLine();
+    searchTerm = searchTerm.toLowerCase();
+    ArrayList<Movie> results = new ArrayList<>();
 
+    for (int i = 0; i < movies.size(); i++) {
+      String movieKeyWords = movies.get(i).getKeywords();
+      movieKeyWords = movieKeyWords.toLowerCase();
+
+      if (movieKeyWords.indexOf(searchTerm) != -1) {
+        //add the Movie objest to the results list
+        results.add(movies.get(i));
+      }
+    }
+
+    if (results.size() > 0) {
+      // sort the results by title
+      sortResults(results);
+
+      // now, display them all to the user
+      for (int i = 0; i < results.size(); i++) {
+        String title = results.get(i).getTitle();
+
+        // this will print index 0 as choice 1 in the results list; better for user!
+        int choiceNum = i + 1;
+        System.out.println("" + choiceNum + ". " + title);
+      }
+
+      System.out.println("Which movie would you like to learn more about?");
+      System.out.print("Enter number: ");
+      int choice = scanner.nextInt();
+      scanner.nextLine();
+      Movie selectedMovie = results.get(choice - 1);
+      displayMovieInfo(selectedMovie);
+      System.out.println("\n ** Press Enter to Return to Main Menu **");
+      scanner.nextLine();
+    } else {
+      System.out.println("\nNo keywords match that search term!");
+      System.out.println("** Press Enter to Return to Main Menu **");
+      scanner.nextLine();
+    }
     
   }
 
   private void searchCast() {
-    /* TASK 4: IMPLEMENT ME */
+    System.out.print("Enter a person to search for (first or last name): ");
+    String searchTerm = scanner.nextLine();
+
+    ArrayList<String> castMembers = new ArrayList<>();
+    for (int i = 0; i < movies.size(); i++){
+      String actors = movies.get(i).getCast();
+      String[] actorList = actors.split("\\|");
+      for (int j = 0; j < actorList.length; j++){
+        castMembers.add(actorList[i]);
+      }
+    }
+
+    for (int i = 0; i < castMembers.size(); i++) {
+      for (int j = i + 1; j < castMembers.size(); j++) {
+        if (castMembers.get(j).equals(castMembers.get(i))) {
+          castMembers.remove(j);
+          j --;
+        }
+      }
+    }
+
+
+
+
   }
   
   private void listGenres() {
