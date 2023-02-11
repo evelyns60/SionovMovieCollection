@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -163,7 +164,7 @@ public class MovieCollection {
       listToSort.set(possibleIndex, temp);
     }
   }
-  
+
   private void displayMovieInfo(Movie movie) {
     System.out.println();
     System.out.println("Title: " + movie.getTitle());
@@ -219,10 +220,11 @@ public class MovieCollection {
       System.out.println("** Press Enter to Return to Main Menu **");
       scanner.nextLine();
     }
-    
+
   }
 
   private void searchCast() {
+    System.out.println(movies);
     System.out.print("Enter a person to search for (first or last name): ");
     String searchTerm = scanner.nextLine();
     searchTerm = searchTerm.toLowerCase();
@@ -285,24 +287,59 @@ public class MovieCollection {
       System.out.println("\n ** Press Enter to Return to Main Menu **");
       scanner.nextLine();
     } else {
-      System.out.println("\nNo movie titles match that search term!");
+      System.out.println("\nNo cast members match that search term!");
       System.out.println("** Press Enter to Return to Main Menu **");
       scanner.nextLine();
     }
-
-
-
-
   }
-  
+
   private void listGenres() {
-    /* TASK 5: IMPLEMENT ME */
+    ArrayList<String> genreList = new ArrayList<>();
+    for (Movie movie : movies){
+      String genre = movie.getGenres();
+      String[] genreArray = genre.split("\\|");
+      for (int i = 0; i < genreArray.length; i++){
+        genreList.add(genreArray[i]);
+      }
+    }
+
+    for (int i = 0; i < genreList.size(); i++) {
+      for (int j = i + 1; j < genreList.size() - 1; j++) {
+        if (genreList.get(j).equals(genreList.get(i))) {
+          genreList.remove(j);
+          j--;
+        }
+      }
+    }
+
+    sortStrings(genreList);
+
+    // now, display them all to the user
+    for (int i = 0; i < genreList.size(); i++) {
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + genreList.get(i));
+    }
+
+    System.out.println("Which would you like to see all movies for?");
+    int num = scanner.nextInt();
+    scanner.nextLine();
+
+    String genreChoice = genreList.get(num - 1);
+
+    int listNum = 1;
+    sortResults(movies);
+    for (int i = 0; i < movies.size(); i++) {
+      if (movies.get(i).getGenres().indexOf(genreChoice) != -1) {
+        System.out.println("" + listNum + ". " + movies.get(i).getTitle());
+        listNum ++;
+      }
+    }
   }
-  
+
   private void listHighestRated() {
     /* TASK 6: IMPLEMENT ME */
   }
-  
+
   private void listHighestRevenue() {
     /* TASK 6: IMPLEMENT ME */
   }
